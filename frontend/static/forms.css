@@ -1,0 +1,211 @@
+/* forms.css : styles for the Register, Account and Admin pages.
+   It only adds to Sophia's styles.css / profileCSS.css and reuses their colors
+   (--navy, --gold, --border, --text-muted, ...) and cards (.profile-card, .data-table). */
+
+.form-card {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-card-left {
+    max-width: 520px;
+}
+
+/* ---- stacked form (labels above fields) ---- */
+.stack-form label {
+    display: block;
+    margin: 0.9rem 0 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.stack-form input,
+.stack-form select,
+.inline-form input[type="text"] {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+}
+
+.inline-form input[type="text"] {
+    width: 220px;
+}
+
+.stack-form input:focus,
+.stack-form select:focus,
+.inline-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--navy);
+}
+
+.stack-form small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.form-footnote {
+    margin: 1.25rem 0 0;
+    text-align: center;
+}
+
+/* ---- buttons (same look as the "Apply filters" button) ---- */
+.btn,
+.btn-small {
+    padding: 0.55rem 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn:hover,
+.btn-small:hover {
+    background: var(--navy-light);
+}
+
+.stack-form .btn {
+    margin-top: 1.1rem;
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.btn-gold:hover {
+    background: #e19715;
+}
+
+.btn:disabled,
+.btn-small:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.btn-small {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+}
+
+.btn-danger {
+    background: var(--rating-bad);
+}
+
+.btn-danger:hover {
+    background: #b92d3b;
+}
+
+.btn-quiet {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--border);
+}
+
+.btn-quiet:hover {
+    background: var(--bg);
+}
+
+.row-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.row-actions .confirm-text {
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.data-table select {
+    padding: 0.3rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    background: #fff;
+}
+
+.data-table a {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* ---- messages ---- */
+.form-message {
+    margin: 0.9rem 0 0;
+    padding: 0.55rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    border: 1px solid;
+}
+
+.form-message.error {
+    background: #fdecec;
+    border-color: #f1bcbc;
+    color: #8e2626;
+}
+
+.form-message.success {
+    background: #e8f6ee;
+    border-color: #b5e0c5;
+    color: #14653a;
+}
+
+.inline-form + .form-message {
+    margin-top: 0.9rem;
+}
+
+/* ---- header: extra links in the logged-in box ---- */
+#account-box a {
+    white-space: nowrap;
+}
+
+/* ---- "Follow this player" button on the profile page ---- */
+.follow-box {
+    margin-top: 0.6rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.follow-box .follow-status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.follow-box .follow-status.success {
+    color: var(--rating-good);
+    font-weight: 600;
+}
+
+.follow-box .follow-status.error {
+    color: var(--rating-bad);
+    font-weight: 600;
+}
+
+.follow-box .follow-status a {
+    color: var(--navy);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .inline-form input[type="text"] {
+        width: 100%;
+    }
+}

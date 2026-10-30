@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Admin - TeamTracker.gg</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="profileCSS.css">
+        <link rel="stylesheet" href="forms.css">
+    </head>
+    <body data-page="admin">
+
+    <header id="header">
+
+            <div id="title-box">
+                <h1>TeamTracker.gg</h1>
+            </div>
+
+            <form id="login-box">
+                <label for="username">Username</label>
+                <label for="pw">Password</label>
+                <div class="login-fields">
+                    <input type="text" id="username" name="username" placeholder="Username">
+                    <input type="password" id="pw" name="pw" placeholder="Password">
+                </div>
+                <input type="submit" name="submit" value="Login"> or <a href="register.html">Register</a>
+            </form>
+
+            <form id="search-box" action="results.html" method="get">
+                <label for="search-input" class="sr-only">Search players</label>
+                <input type="search" id="search-input" name="search" placeholder="Enter Riot/player ID">
+                <input type="submit" name="submit" value="Search">
+            </form>
+
+            <nav aria-label="Primary">
+                <ul id="primary-nav">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="list.html">My Profile</a></li>
+                </ul>
+            </nav>
+
+    </header>
+
+        <main id="content">
+
+            <p id="gate-message" class="profile-message" hidden></p>
+
+            <div id="admin-view" class="gated" hidden>
+
+                <section class="profile-card">
+                    <h2>All users</h2>
+                    <p class="card-note">Every account, with the number of searches it has saved. Deleting an account also deletes its saved searches. You cannot delete your own account.</p>
+                    <p id="users-message" class="form-message" role="alert" hidden></p>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Joined</th>
+                                    <th scope="col">Saved searches</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-rows"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="profile-card form-card-left">
+                    <h2>Create a user</h2>
+                    <form id="create-user-form" class="stack-form" novalidate>
+                        <label for="new-username">Username</label>
+                        <input type="text" id="new-username" name="username" maxlength="30" autocomplete="off" required>
+
+                        <label for="new-email">Email</label>
+                        <input type="email" id="new-email" name="email" maxlength="255" autocomplete="off" required>
+
+                        <label for="new-role">Role</label>
+                        <select id="new-role" name="role">
+                            <option value="user" selected>User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+
+                        <label for="new-user-password">Password</label>
+                        <input type="password" id="new-user-password" name="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+                        <small>At least 8 characters.</small>
+
+                        <p id="create-message" class="form-message" role="alert" hidden></p>
+                        <button type="submit" class="btn btn-gold">Create user</button>
+                    </form>
+                </section>
+
+            </div>
+
+        </main>
+
+        <footer id="footer">
+            <div id="learn-more">
+                <h2>Learn More</h2>
+                <p>TeamTracker.gg is a fan-made site where League of Legends players can scan profiles to see their average teammate performance split by role. Time to see who is hardstuck because of teammates!</p>
+            </div>
+
+            <p>TeamTracker.gg is an independent fan project. It is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+
+        </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="account.js"></script>
+
+    </body>
+</html>

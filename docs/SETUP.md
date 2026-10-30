@@ -104,12 +104,24 @@ Flask runs in debug mode, so when you save a Python file the server restarts its
 
 ## 9. What to click through (also your screenshots for the check-in)
 
-1. Home page: search for `raven` and see matching players, plus the "Most followed players" report.
-2. Click a player: the profile page shows ranks, win rate, and teammate averages by role. **This page is the GUI screenshot that shows the database working.**
-3. Sign up, then log in.
-4. On a profile, press "Follow this player" and then open "My account": the saved search appears (Create and Read).
-5. Edit it (Update) and delete it (Delete).
-6. Log in as the admin and open "Admin" to see all users and create or delete accounts.
+1. Home page (`/`): type `LunarRaven#7777` and press Search.
+2. The profile page shows ranks, win rate, and teammate averages by role. **This is the GUI screenshot that shows the database working.**
+3. Change Queue or Time period and press "Apply filters". The numbers change.
+4. Log in with the admin account you created in step 7. The header shows your username.
+5. Search a name that does not exist (`Nobody#0000`) to see the "couldn't find that profile" message.
+
+The Register page and the saved-search pages are not built in the front end yet. The backend for them works. To show it, use the commands in `docs/API.md`, or the quick test below.
+
+### Quick test of sign-up and saved searches without any page (optional)
+
+Open the site in a browser, open the developer console (F12, Console tab), and paste:
+
+```
+const s = await (await fetch('/api/session')).json();
+const h = {'Content-Type':'application/json','X-CSRF-Token': s.csrfToken};
+await fetch('/api/register',{method:'POST',headers:h,body:JSON.stringify({username:'demo1',email:'demo1@example.com',password:'password123'})}).then(r=>r.json())
+```
+You should see `{ok: true, username: "demo1"}`. Then log in as `demo1` in the header's login form.
 
 ## Troubleshooting
 
@@ -123,7 +135,7 @@ Flask runs in debug mode, so when you save a Python file the server restarts its
 | `Address already in use` when starting Flask | Another program uses port 5001. Start it on another port: `PORT=5002 python backend/server.py` (Mac) or `$env:PORT=5002; python backend/server.py` (PowerShell). |
 | `relation "registered_users" does not exist` or `column "role" does not exist` | You have an old database volume. Run `docker compose down -v` then `docker compose up -d`. |
 | `ModuleNotFoundError: No module named 'flask'` | The virtual environment is not active. Run the activate line from step 5 again. |
-| Browser shows the form "has expired" (400) | Your session cookie was cleared. Reload the page and try again. |
+| "Security token missing or expired" (400) | Your session cookie was cleared. Reload the page and try again. |
 
 ## Database tables, in one place
 

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>My Profile - TeamTracker.gg</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="profileCSS.css">
+    </head>
+    <body>
+
+    <header id="header"> <!--header section-->
+
+            <div id="title-box"> <!--title box-->
+                <h1>TeamTracker.gg</h1>
+            </div>
+
+            <!-- since this page assumes the user is already logged in, the login form is
+                 replaced with a small account box showing their profile picture instead -->
+            <div id="account-box">
+                <img src="img/profilePicImg.PNG" alt="My Profile Username's profile picture"> <!--character image credit: Castle Crashers Wiki-->
+                <span>My Profile Username</span>
+                <a href="home.html">Log Out</a>
+            </div>
+
+            <form id="search-box" action="results.html" method="get"> <!--search bar-->
+                <label for="search-input" class="sr-only">Search builds</label>
+                <input type="search" id="search-input" name="search" placeholder="Enter Riot/player ID">
+                <input type="submit" name ="submit" value="Search">
+            </form>
+
+            <nav aria-label="Primary"> <!--nav landmark so screen readers can jump straight to the menu-->
+                <ul id="primary-nav"> <!--primary nav in header-->
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="list.html" class="selected">My Profile</a></li> <!--selected on this page-->
+                </ul>
+            </nav>
+
+    </header> <!--end of header-->
+
+        <main id="content"> <!--main body-->
+
+            <p id="profile-message" class="profile-message">Loading profile...</p>
+
+            <div id="player-profile" data-endpoint="/api/me/profile" hidden>
+
+                <div id="profile-info">
+                    <img src="img/profilePicImg.PNG" alt="Profile picture" id="profile-picture">
+                    <div class="profile-details">
+                        <h2 id="profile-username"></h2>
+                    </div>
+                </div>
+
+                <form class="profile-filters" action="#" method="get">
+                    <div class="filter-field">
+                        <label for="queue">Queue</label>
+                        <select id="queue" name="queue">
+                            <option value="any" selected>Any queue</option>
+                            <option value="solo">Ranked Solo/Duo</option>
+                            <option value="flex">Ranked Flex</option>
+                        </select>
+                    </div>
+                    <div class="filter-field">
+                        <label for="period">Time period</label>
+                        <select id="period" name="period">
+                            <option value="1">1 month</option>
+                            <option value="3">3 months</option>
+                            <option value="6" selected>6 months</option>
+                            <option value="12">12 months</option>
+                        </select>
+                    </div>
+                    <button type="submit">Apply filters</button>
+                </form>
+
+                <section class="profile-card">
+                    <h2>Current rank</h2>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Queue</th>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">LP</th>
+                                    <th scope="col">Wins</th>
+                                    <th scope="col">Losses</th>
+                                    <th scope="col">Win rate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rank-rows"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="stat-tiles">
+                    <div class="stat-tile">
+                        <p class="tile-value" id="summary-games"></p>
+                        <p class="tile-label">Games in this filter</p>
+                    </div>
+                    <div class="stat-tile">
+                        <p class="tile-value" id="summary-wins"></p>
+                        <p class="tile-label">Wins</p>
+                    </div>
+                    <div class="stat-tile">
+                        <p class="tile-value" id="summary-winrate"></p>
+                        <p class="tile-label">Win rate</p>
+                    </div>
+                </div>
+
+                <section class="profile-card">
+                    <h2>How this player's teammates performed, by role</h2>
+                    <p class="card-note" id="role-note"></p>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Games together</th>
+                                    <th scope="col">Avg kills</th>
+                                    <th scope="col">Avg deaths</th>
+                                    <th scope="col">Avg assists</th>
+                                    <th scope="col">KDA</th>
+                                    <th scope="col">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody id="role-rows"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+
+
+        </main> <!--end of main content-->
+
+        <footer id="footer"> <!-- footer-->
+            <div id="learn-more"> <!-- learn more-->
+                <h2>Learn More</h2>
+                <p>TeamTracker.gg is a fan-made site where League of Legends players can scan profiles to see their average teammate performance split by role. Time to see who is hardstuck because of teammates!</p>
+            </div>
+
+            <p>TeamTracker.gg is an independent fan project. It is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+
+        </footer> <!--end of footer-->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="account.js"></script>
+
+    </body>
+</html>

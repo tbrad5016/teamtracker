@@ -1,0 +1,32 @@
+#content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#home-search {
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 640px;
+}
+
+#home-search input[type="search"] {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 999px 0 0 999px;
+    padding: 0.9rem 1.4rem;
+    font-size: 1.1rem;
+}
+
+#home-search input[type="submit"] {
+    border: none;
+    border-radius: 0 999px 999px 0;
+    padding: 0.9rem 1.6rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+}

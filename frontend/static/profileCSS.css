@@ -1,0 +1,246 @@
+:root {
+    --rating-bad: #dc3545;
+    --rating-average: #e0a100;
+    --rating-good: #16a34a;
+}
+
+#profile-info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+#profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--gold);
+    flex-shrink: 0;
+}
+
+.profile-details h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 1.3rem;
+}
+
+.profile-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.filter-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.filter-field select {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+}
+
+.filter-field select:focus {
+    outline: none;
+    border-color: var(--navy);
+}
+
+.profile-filters button {
+    padding: 0.55rem 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profile-filters button:hover {
+    background: var(--navy-light);
+}
+
+.profile-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.profile-card h2 {
+    margin: 0 0 1rem;
+    color: var(--navy);
+    font-size: 1.1rem;
+}
+
+.card-note {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 0.75rem;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.stat-tiles {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.stat-tile {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.tile-value {
+    margin: 0;
+    font-family: "Arial Black", Arial, sans-serif;
+    font-size: 1.9rem;
+    color: var(--navy);
+}
+
+.tile-label {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.kda-cell {
+    min-width: 120px;
+}
+
+.kda-bar {
+    height: 6px;
+    margin-bottom: 0.3rem;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.kda-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+}
+
+.rating-bad {
+    background: var(--rating-bad);
+}
+
+.rating-average {
+    background: var(--rating-average);
+}
+
+.rating-good {
+    background: var(--rating-good);
+}
+
+.rating {
+    display: inline-block;
+    padding: 0.15rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.rating.rating-average {
+    color: var(--text);
+}
+
+.profile-message {
+    padding: 2rem 0;
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--on-dark);
+}
+
+#player-profile.is-loading {
+    opacity: 0.5;
+}
+
+.profile-filters button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.data-table td.empty-row {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    #profile-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stat-tiles {
+        flex-direction: column;
+    }
+
+    .profile-card {
+        padding: 1rem;
+    }
+}

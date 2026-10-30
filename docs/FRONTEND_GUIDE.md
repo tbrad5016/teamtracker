@@ -1,165 +1,49 @@
-# Front-end guide (for Sophia): how your HTML and CSS plug into the backend
+# Front-end guide (for Sophia)
 
-You do not need to write any Python. The backend is a Flask app. Flask reads an HTML file from `frontend/templates/`, fills in the data, and sends it to the browser. A template is just normal HTML with a few `{{ ... }}` holes for data.
+Your pages stay plain HTML, CSS and JavaScript. The backend serves them as they are and answers your `$.ajax` calls with JSON. You do not write any Python.
+
+## Where your files go
 
 ```
 frontend/
-  templates/     <- HTML pages (Flask only looks here)
-  static/        <- CSS, images, JavaScript, fonts (served at /static/...)
+  templates/   home.html, results.html, list.html   <- your HTML pages
+  static/      styles.css, homeCSS.css, profileCSS.css, script.js, auth.js, img/...
 ```
 
-The pages in this repo are plain placeholders so the site works today. Replace them with your design.
+Everything is served from the site root, so your links work exactly as you wrote them: `href="styles.css"`, `src="script.js"`, `img/profilePicImg.PNG`, `href="results.html"`.
 
-## How to work
+**Put your images in `frontend/static/img/`.** The profile picture file `img/profilePicImg.PNG` was not in the files we received, so the picture shows as broken until it is added. The name is case sensitive on Mac and Linux, so keep `.PNG` exactly.
 
-1. Follow `docs/SETUP.md` once, then run `python backend/server.py`.
-2. Edit a file in `frontend/templates/` or `frontend/static/`, save, and refresh the browser. HTML and CSS changes show up without restarting.
-3. Never hard-code player data into an HTML file. Use the `{{ variable }}` names listed below so the real database data shows up.
+## What we changed in your files (3 small things)
 
-## Linking CSS, images and JavaScript
+1. `script.js`: `USE_MOCK_PROFILE_DATA` is now `false`, so the pages call the real backend. The fake `SEARCH_SUGGESTIONS` list was replaced by a call to `/api/search` (real players).
+2. `home.html`, `results.html`, `list.html`: two lines added below `script.js`:
+   `<script src="auth.js"></script>` and `<script src="account.js"></script>`
+   Add the same two lines to every new page.
+3. A new file, `static/auth.js`, which belongs to the backend. It handles login. Please do not edit it. If you need something changed, tell Brad.
 
-Do not write `href="style.css"`. Use `url_for`, which finds the right path:
+If you send updated versions of your files, keep those three things.
 
-```html
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<img src="{{ url_for('static', filename='logo.png') }}" alt="TeamTracker">
-<script src="{{ url_for('static', filename='app.js') }}"></script>
-```
+## What the backend does for you
 
-Put your files in `frontend/static/`. Subfolders are fine (`filename='img/logo.png'`).
-
-## The layout file (`base.html`)
-
-`base.html` holds the header, the navigation, the flash messages and the footer. Every other page starts with `{% extends "base.html" %}` and fills the `content` block:
-
-```html
-{% extends "base.html" %}
-{% block title %}Page name - TeamTracker.gg{% endblock %}
-{% block content %}
-  ...your page...
-{% endblock %}
-```
-
-If your design already has its own full-page HTML, you can ignore `extends` and keep the whole page in one file. In that case copy the three pieces listed under "Must keep" below into your file.
-
-## Must keep (the site breaks without these)
-
-**1. A hidden CSRF field inside every `<form method="post">`.** This blocks forged form submissions. Without it the server answers "400, form has expired".
-
-```html
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-```
-
-**2. Log out must be a POST form, not a link.**
-
-```html
-<form method="post" action="{{ url_for('logout') }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-  <button type="submit">Log out</button>
-</form>
-```
-You can style the button to look like a link (see `.linklike` in `style.css`).
-
-**3. Flash messages.** Success and error messages ("Wrong username or password", "Account created") come from the server. Keep this loop somewhere visible:
-
-```html
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="flash flash-{{ category }}">{{ message }}</div>
-  {% endfor %}
-{% endwith %}
-```
-`category` is `success`, `error` or `info`.
-
-Also keep every form field's `name="..."` exactly as listed below, because the server reads fields by name. Change the labels, classes, layout and order freely.
-
-## Variables available in every template
-
-| Name | What it is |
+| Your page or element | What happens |
 |---|---|
-| `current_user` | `None` when logged out. Otherwise has `.user_id`, `.username`, `.email`, `.role` (`user` or `admin`) |
-| `csrf_token()` | prints the hidden token value |
-| `queue_choices` | `{"": "Any queue", "RANKED": "Ranked", "CASUAL": "Casual"}` |
-| `month_choices` | `{1: "1 month", 2: ..., 6: "6 months"}` |
+| `results.html?search=Name%23Tag` | `script.js` calls `GET /api/profile?riotId=...&queue=...&period=...`. The reply matches `docs/profile-data-format.md`. Capitals do not matter. |
+| `#login-box` form | `auth.js` sends it to `/api/login`. A wrong password shows the error message next to the button. A good login reloads the page. |
+| Logged in | `auth.js` swaps `#login-box` for an `#account-box` (picture, username, Log Out). It uses the same markup and CSS as `list.html`. |
+| `list.html` while logged out | The page shows "Please log in" and the account box says "Not logged in". |
+| Log Out link (`#logout-link`) | Logs out and goes to `home.html`. |
 
-Use `{% if current_user %}` to show different things to logged-in visitors, and `{% if current_user and current_user.role == 'admin' %}` for admin-only items.
+Keep these ids because the scripts look for them: `#login-box`, `#username`, `#pw`, `#account-box`, `#home-search`, `#search-box`, `#player-profile`, `#profile-message`, `#queue`, `#period`, `#rank-rows`, `#role-rows`, `#summary-games`, `#summary-wins`, `#summary-winrate`, `#profile-username`.
 
-## Page by page
+## Pages the backend side already built (restyle them if you like)
 
-Template files and routes. If you name your file differently, either rename it to match or tell Brad to change the one `render_template("...")` line in `backend/server.py`.
+`register.html`, `account.html` and `admin.html` use your `styles.css` and `profileCSS.css`, plus `forms.css` (buttons and form fields). `account.js` runs them, and `auth.js` adds the "Follow this player" button to profiles. Keep their ids and the `data-page` attribute on `<body>`. The search suggestions in `script.js` now call `GET /api/search`, so no names are hard-coded.
 
-### Home / search: `home.html`, route `/`
-Search form: `GET`, field `q`, action `{{ url_for('home') }}`.
+Still open: the My Profile page needs a decision (see `docs/API.md`, "Open decisions").
 
-| Variable | Contents |
-|---|---|
-| `q` | what was typed |
-| `players` | list of players. Each: `game_name`, `tagline`, `riot_id` (like `LunarRaven#7777`), `tier`, `division` (`tier` is empty when unranked) |
-| `top_followed` | list for the "most followed" report. Each: `game_name`, `tagline`, `riot_id`, `followers` |
-| `db_info` | `.version`, `.database` (small status line, optional) |
+## Try it
 
-Link to a profile with `{{ url_for('player', game_name=p.game_name, tagline=p.tagline) }}`.
+Follow `docs/SETUP.md`, then open http://127.0.0.1:5001. Edit a file, save, and refresh the browser (hard refresh: Ctrl+Shift+R). If a page looks blank, open the browser's developer console (F12) and look for red errors.
 
-### Player profile: `player.html`, route `/player/<game_name>/<tagline>`
-This is the page that shows the database data. Filter form: `GET`, fields `queue` and `months`.
-
-| Variable | Contents |
-|---|---|
-| `player` | `.game_name`, `.tagline`, `.riot_id` |
-| `ranks` | list. Each: `queue`, `tier`, `division`, `lp`, `wins`, `losses`, `win_rate_pct` |
-| `stats` | `.games`, `.wins`, `.win_rate_pct` (can be `None` when there are no games) |
-| `roles` | teammate averages, one row per role. Each: `role`, `shared_games`, `avg_kills`, `avg_deaths`, `avg_assists`, `kda`, `rating` (`Good`, `Average` or `Bad`) |
-| `selected_queue`, `selected_months` | current filter values, for pre-selecting dropdowns |
-| `good_kda`, `average_kda` | thresholds, for the legend text |
-
-Rating colors: the placeholder CSS uses classes `rating-good`, `rating-average`, `rating-bad` (from `{{ r.rating|lower }}`).
-
-"Follow this player" form (logged-in only): `POST` to `{{ url_for('save_search', game_name=player.game_name, tagline=player.tagline) }}` with fields `queue`, `months` and the CSRF field.
-
-Privacy rule from our project: we show teammates only as role averages, never as named players. Keep it that way.
-
-### Log in: `login.html`, route `/login`
-`POST` to `{{ url_for('login') }}`. Fields: `username`, `password`, hidden `next` (`value="{{ next }}"`), CSRF. The variable `form` holds the previously typed values (use `{{ form.get('username', '') }}`).
-
-### Sign up: `signup.html`, route `/signup`
-`POST` to `{{ url_for('signup') }}`. Fields: `username`, `email`, `password`, `confirm_password`, CSRF.
-
-### My account: `account.html`, route `/account` (login required)
-`searches` is a list of saved searches. Each: `search_id`, `player`, `game_name`, `tagline`, `queue_category` (`RANKED`, `CASUAL` or `None`), `months`, `saved_on`.
-* Edit link: `{{ url_for('edit_search', search_id=s.search_id) }}`
-* Delete link: `{{ url_for('delete_search', search_id=s.search_id) }}`
-* Change password form: `POST` to `{{ url_for('change_password') }}`. Fields: `current_password`, `new_password`, `confirm_password`, CSRF.
-
-### Other pages
-| File | Route | Notes |
-|---|---|---|
-| `search_edit.html` | `/searches/<id>/edit` | variable `search`. Form fields `queue`, `months`, CSRF |
-| `confirm.html` | any "are you sure?" delete | variables `title`, `message`, `action`, `cancel_url`, `button`. Form is `POST` to `{{ action }}` with CSRF |
-| `admin_users.html` | `/admin/users` (admins only) | variables `users`, `form`. Create-user form fields: `username`, `email`, `role`, `password`, `confirm_password`, CSRF |
-| `error.html` | 404, 403, 500... | variables `code`, `title`, `message` |
-
-## Who can see what
-
-* Anyone: home, search, player profiles, sign up, log in.
-* Logged in: save a search, My account (edit and delete their own searches, change password).
-* Admin: the Admin page (list users, create users, delete users).
-
-If a visitor opens a page they may not use, the server redirects them to the login page or shows the 403 error page. You do not need to hide anything yourself for security, but hiding links they cannot use is good design.
-
-## Quick Jinja cheat sheet
-
-```
-{{ value }}                        print a value (HTML is escaped automatically)
-{{ value|capitalize }}             filter: Gold -> Gold, gold -> Gold
-{% if x %} ... {% else %} ... {% endif %}
-{% for p in players %} ... {% endfor %}
-{{ url_for('player', game_name='A', tagline='1') }}   build a link
-{# this is a comment #}
-```
-
-## Bringing your own files in
-
-1. Drop your CSS, images and JS into `frontend/static/`.
-2. Open the matching file in `frontend/templates/` and replace the HTML, keeping the must-keep items and field names above.
-3. Run the site and click through every page. If something shows `None` or is blank, the variable name is probably misspelled.
-4. Commit and push. Tell Brad if you needed a new piece of data on a page. It is one small change in `backend/server.py`.
+Sample players to search: `LunarRaven#7777`, `QuietRaven#5150`.

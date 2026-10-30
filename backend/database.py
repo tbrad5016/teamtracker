@@ -206,7 +206,7 @@ def get_player(game_name, tagline):
                riot_id_tagline   AS tagline,
                riot_id_game_name || '#' || riot_id_tagline AS riot_id
         FROM Players
-        WHERE riot_id_game_name = %s AND riot_id_tagline = %s
+        WHERE LOWER(riot_id_game_name) = LOWER(%s) AND LOWER(riot_id_tagline) = LOWER(%s)
         LIMIT 1;
     """, (game_name, tagline))
     return rows[0] if rows else None
@@ -230,7 +230,7 @@ def get_most_followed(limit=5):
 def get_ranks(puuid):
     # JOIN: the player's current rank in each ranked queue.
     return query("""
-        SELECT q.description AS queue, r.tier, r.rank_division AS division,
+        SELECT r.queue_id, q.description AS queue, r.tier, r.rank_division AS division,
                r.league_points AS lp, r.wins, r.losses,
                ROUND(100.0 * r.wins / NULLIF(r.wins + r.losses, 0), 1)::float AS win_rate_pct
         FROM Player_Ranks r
@@ -240,7 +240,7 @@ def get_ranks(puuid):
     """, (puuid,))
 
 
-def get_win_rate(puuid, category, months):
+def get_win_rate(puuid, category, months, queue_id=None):
     # The player's own games in the chosen queue category and time window.
     # category is 'RANKED', 'CASUAL' or None (= any queue).
     return query(f"""
@@ -254,11 +254,13 @@ def get_win_rate(puuid, category, months):
         JOIN Queue_Types q  ON q.queue_id = m.queue_id
         WHERE pa.puuid = %(puuid)s
           AND (%(category)s::varchar IS NULL OR q.category = %(category)s)
+          AND (%(queue_id)s::int IS NULL OR q.queue_id = %(queue_id)s)
           AND {IN_WINDOW};
-    """, {"puuid": puuid, "category": category, "months": months})[0]
+    """, {"puuid": puuid, "category": category, "months": months,
+          "queue_id": queue_id})[0]
 
 
-def get_teammate_roles(puuid, category, months):
+def get_teammate_roles(puuid, category, months, queue_id=None):
     # REPORT (the core TeamTracker query): self-join + subquery + GROUP BY.
     # "me" and "mate" are the same table (Participants): same match, same team,
     # different player. Teammates are grouped by ROLE only, so no teammate is
@@ -285,11 +287,12 @@ def get_teammate_roles(puuid, category, months):
             WHERE me.puuid = %(puuid)s
               AND mate.role IS NOT NULL
               AND (%(category)s::varchar IS NULL OR q.category = %(category)s)
+              AND (%(queue_id)s::int IS NULL OR q.queue_id = %(queue_id)s)
               AND {IN_WINDOW}
             GROUP BY mate.role
         ) AS by_role
         ORDER BY array_position(ARRAY['TOP','JUNGLE','MIDDLE','BOTTOM','UTILITY'], role::text);
-    """, {"puuid": puuid, "category": category, "months": months,
+    """, {"puuid": puuid, "category": category, "months": months, "queue_id": queue_id,
           "good": GOOD_KDA, "average": AVERAGE_KDA})
 
 

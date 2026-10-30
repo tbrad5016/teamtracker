@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>TeamTracker.gg</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="homeCSS.css">
+    </head>
+    <body>
+
+    <header id="header"> <!--header section-->
+
+            <div id="title-box"> <!--title box-->
+                <h1>TeamTracker.gg</h1>
+            </div>
+
+            <nav aria-label="Primary">
+                <ul id="primary-nav"> <!--primary nav in header-->
+                    <li><a href="home.html" class="selected">Home</a></li>
+                    <li><a href="list.html">My Profile</a></li>
+                </ul>
+            </nav>
+
+            <form id="login-box">
+                <label for="username">Username</label>
+                <label for="pw">Password</label>
+                    <div class="login-fields">
+                        <input type="text" id="username" name="username" placeholder="Username">
+                        <input type="password" id="pw" name="pw" placeholder="Password">
+                    </div>
+                        <input type="submit" name="submit" value="Login"> or <a href="#">Register</a>
+            </form>
+
+    </header> <!--end of header-->
+
+        <main id="content"> <!--main body-->
+
+            <form id="home-search" action="results.html" method="get">
+                <label for="home-search-input" class="sr-only">Search builds</label>
+                <input type="search" id="home-search-input" name="search" placeholder="Enter Riot/player ID">
+                <input type="submit" name="submit" value="Search">
+            </form>
+
+        </main> <!--end of content-->
+
+        <footer id="footer"> <!-- FOOTER-->
+            <div id="learn-more"> <!-- Learn More-->
+                <h2>Learn More</h2>
+                <p>TeamTracker.gg is a fan-made site where League of Legends players can scan profiles to see their average teammate performance split by role. Time to see who is hardstuck because of teammates!</p>
+            </div>
+
+            <p>TeamTracker.gg is an independent fan project. It is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+
+        </footer> <!--end of footer-->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="account.js"></script>
+
+    </body>
+</html>
